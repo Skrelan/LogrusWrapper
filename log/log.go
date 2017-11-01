@@ -1,6 +1,8 @@
 package log
 
 import (
+	"strings"
+
 	"github.com/sirupsen/logrus"
 )
 
@@ -8,11 +10,16 @@ var muteable = logrus.New()
 var immuteable = logrus.New()
 
 func init() {
-	s := "debug" //you can use the Viper pkg to read from an config file and assign it here.
-	muteable.SetLevel(setLogLevel(s))
+	muteable.SetLevel(getLogLevel("info"))
 }
 
-func setLogLevel(s string) logrus.Level {
+//SetLogLevel alows user to set log level from calling package
+func SetLogLevel(s string) {
+	muteable.SetLevel(getLogLevel(s))
+}
+
+func getLogLevel(str string) logrus.Level {
+	s := strings.ToLower(str)
 	switch s {
 	case "debug":
 		return logrus.DebugLevel
